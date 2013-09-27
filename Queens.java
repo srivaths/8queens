@@ -176,6 +176,12 @@ public class Queens {
       }
       System.out.println();
     }
+    public static void printUsage() {
+			System.out.println("Usage:");
+			System.out.println("  'program-name'         -- Computes one solution");
+			System.out.println("  'program-name all'     -- Computes all solutions");
+			System.out.println("  'program-name --debug' -- Displays intermediate steps");
+    }
   }
 	
 	/**
@@ -185,23 +191,24 @@ public class Queens {
 		
     Queens q = new Queens();
 		boolean all = false; // solve for all solutions?
+    
+    // Process command line arguments
 		for(String arg:args) {
 			if(OPT_DEBUG.equals(arg)) {
 				q.debug = true;
-				continue;
-			}
-			if("all".equals(arg)) {
+      } else if("all".equals(arg)) {
 				all = true;
-				continue;
-			}
-			if("-h".equals(arg) || "--help".equals(arg) || "--usage".equals(arg)) {
-				System.out.println("Usage:");
-				System.out.println("  'program-name'         -- Computes one solution");
-				System.out.println("  'program-name all'     -- Computes all solutions");
-				System.out.println("  'program-name --debug' -- Displays intermediate steps");
+      } else if(arg.)
+      } else if("-h".equals(arg) || "--help".equals(arg) || "--usage".equals(arg)) {
+        Queens.printUsage();
 				System.exit(0);
-			}
+      } else {
+        System.out.println("Invalid flag:" + arg);
+        printUsage();
+      }
 		}
+    
+    // Run the task
 		if(all) {
 			q.getAllSolutions();
 		} else {
