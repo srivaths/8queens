@@ -15,10 +15,14 @@ public class Queens {
   private static final int UNBLOCK = 1;
   /** Default board size */
   private static final int DEFAULT_BOARD_SIZE = 8;
+  /** Actual board size */
+  private int size;
   /** Chess board */
   private int[][] board;
-  private int queenCount = 0;
-  private boolean DEBUG = false;
+	/** Command line option to toggle debug mode on */
+	private static final String OPT_DEBUG = "--debug";
+	/** Flag that indicates that we are in debug mode */
+  public boolean debug = false;
   /**
    * Creates a problem solver with the {@link DEFAULT_BOARD_SIZE} board.
    */
@@ -29,7 +33,17 @@ public class Queens {
    * Creates a problem solver of the specified size board.
    */
   public Queens(int size) {
+		this.size = size;
     board = new int[size][size];
+  }
+  public void getAllSolutions() {
+	  for(int i = 0; i < size; i++) {
+		  board = new int[size][size];
+			placeQueen(0, i);
+			build(1);
+			print();
+			System.out.println();
+	  }
   }
   /**
    * Generates a solution.
@@ -54,7 +68,7 @@ public class Queens {
     // Find the queen position for this row
     // Determine the first unused column for this row.
     for(int c = 0; c < board.length; c++) {
-      if(DEBUG) {
+      if(debug) {
         System.out.printf("  b:%d Column %d\n", row, c);
         print();
       }
@@ -156,16 +170,43 @@ public class Queens {
         switch (cell) {
           case QUEEN: s = "Q"; break;
           case EMPTY: s = "."; break;
-          default: s = DEBUG?"x":"."; break;
+          default: s = debug?"x":"."; break;
         }
         System.out.printf("%2s  ", s);
       }
       System.out.println();
     }
   }
-  public static void main(String[] x) {
+	
+	/**
+		* Driver
+		*/
+  public static void main(String[] args) {
+		
     Queens q = new Queens();
-    q.build();
-    q.print();
+		boolean all = false; // solve for all solutions?
+		for(String arg:args) {
+			if(OPT_DEBUG.equals(arg)) {
+				q.debug = true;
+				continue;
+			}
+			if("all".equals(arg)) {
+				all = true;
+				continue;
+			}
+			if("-h".equals(arg) || "--help".equals(arg) || "--usage".equals(arg)) {
+				System.out.println("Usage:");
+				System.out.println("  'program-name'         -- Computes one solution");
+				System.out.println("  'program-name all'     -- Computes all solutions");
+				System.out.println("  'program-name --debug' -- Displays intermediate steps");
+				System.exit(0);
+			}
+		}
+		if(all) {
+			q.getAllSolutions();
+		} else {
+			q.solve();
+			q.print();
+		}
   }
 }
